@@ -1,3 +1,3 @@
 <?php
-header("build/index.php");
+header("Location: build/index.php");
 ?>

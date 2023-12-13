@@ -13,6 +13,10 @@
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
+<?php
+include "../connect.php";
+error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -306,7 +310,14 @@
                   <div class="flex-none w-2/3 max-w-full px-3">
                     <div>
                       <p class="mb-0 font-sans text-sm font-semibold leading-normal uppercase dark:text-white dark:opacity-60">Total Expanses Money</p>
-                      <h5 class="mb-2 font-bold dark:text-white">money expanses</h5>
+                      <h5 class="mb-2 font-bold dark:text-white">
+                      <?php
+                      $expanse = mysqli_query($connect, "SELECT SUM(total) as purchase FROM purchaselog");
+                      $expanse = mysqli_fetch_assoc($expanse);
+                      $expanse = $expanse['purchase'];
+                      echo "IDR " . number_format($expanse);
+                      ?>
+                      <h5>
                       <p class="mb-0 dark:text-white dark:opacity-60">
                         <span class="text-sm font-bold leading-normal text-emerald-500">+5%</span>
                         than last month
@@ -338,6 +349,7 @@
               <div class="p-4 pb-0 mb-0 rounded-t-4">
                 <div class="flex justify-between">
                   <h6 class="mb-2 dark:text-white">Purchases Log</h6>
+                  <h6 class="mb-2 dark:text-white bg-blue-300">Add Expanse</h6>
                 </div>
               </div>
               <div class="overflow-x-auto">
@@ -367,31 +379,37 @@
                         </div>
                       </td>
                     </tr>
-                    <!-- TODO make foreach here -->
-                    <!-- <tr>
+                    <?php 
+                    $sql = mysqli_query($connect, "SELECT * FROM purchaselog ORDER BY date DESC");
+                    while ($row = $sql -> fetch_assoc()){
+                    ?>
+                    <tr>
                       <td class="p-2 align-middle bg-transparent border-b w-3/10 whitespace-nowrap dark:border-white/40">
                         <div class="flex items-center px-2 py-1">
                           <div class="ml-6">
-                            <h6 class="mb-0 text-sm leading-normal dark:text-white">Username</h6>
+                            <h6 class="mb-0 text-sm leading-normal dark:text-white"><?= $row['username']?></h6>
                           </div>
                         </div>
                       </td>
                       <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
                         <div class="text-center">
-                          <h6 class="mb-0 text-sm leading-normal dark:text-white">Items</h6>
+                          <h6 class="mb-0 text-sm leading-normal dark:text-white"><?= $row['items']?></h6>
                         </div>
                       </td>
                       <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
                         <div class="text-center">
-                          <h6 class="mb-0 text-sm leading-normal dark:text-white">Date</h6>
+                          <h6 class="mb-0 text-sm leading-normal dark:text-white"><?= $row['date']?></h6>
                         </div>
                       </td>
                       <td class="p-2 text-sm leading-normal align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
                         <div class="flex-1 text-center">
-                          <h6 class="mb-0 text-sm leading-normal dark:text-white">Totals</h6>
+                          <h6 class="mb-0 text-sm leading-normal dark:text-white"><?php echo number_format($row['total'])?></h6>
                         </div>
                       </td>
-                    </tr> -->
+                    </tr>
+                    <?php
+                    }
+                    ?>
                   </tbody>
                 </table>
               </div>

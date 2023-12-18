@@ -16,6 +16,8 @@
 <?php
 include "connect.php";
 error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
+$page = $_GET["page"];
+$action = $_GET["action"];
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,6 +38,7 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <!-- Main Styling -->
     <link href="./assets/css/argon-dashboard-tailwind.css?v=1.0.1" rel="stylesheet" />
+  
   </head>
 
   <body class="m-0 font-sans text-base antialiased font-normal dark:bg-slate-900 leading-default bg-gray-50 text-slate-500">
@@ -56,7 +59,7 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
       <div class="items-center block w-auto max-h-screen overflow-auto h-sidenav grow basis-full">
         <ul class="flex flex-col pl-0 mb-0">
           <li class="mt-0.5 w-full">
-            <a class="py-2.7 bg-blue-500/13 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors" href="./index.html">
+            <a class="py-2.7 bg-blue-500/13 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors" href="?page=">
               <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                 <i class="relative top-0 text-sm leading-normal text-blue-500 ni ni-tv-2"></i>
               </div>
@@ -103,31 +106,12 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
           <li class="w-full mt-4">
             <h6 class="pl-6 ml-2 text-xs font-bold leading-tight uppercase dark:text-white opacity-60">Account pages</h6>
           </li>
-
           <li class="mt-0.5 w-full">
-            <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="./pages/profile.html">
-              <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                <i class="relative top-0 text-sm leading-normal text-slate-700 ni ni-single-02"></i>
-              </div>
-              <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Profile</span>
-            </a>
-          </li>
-
-          <li class="mt-0.5 w-full">
-            <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="./pages/sign-in.html">
+            <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="?page=signin">
               <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                 <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-single-copy-04"></i>
               </div>
-              <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Sign In</span>
-            </a>
-          </li>
-
-          <li class="mt-0.5 w-full">
-            <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="./pages/sign-up.html">
-              <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-collection"></i>
-              </div>
-              <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Sign Up</span>
+              <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Log Out</span>
             </a>
           </li>
         </ul>
@@ -273,20 +257,36 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
       </div>
       <div class="w-full px-6 py-6 mx-auto">
         <!-- row 1 -->
-        <div class="flex flex-wrap -mx-3">
+        <div class="flex flex-wrap -mx-3 ">
           <!-- card1 -->
-          <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-2/4">
+          <div class="w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:w-1/3 mt-4">
             <div class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
               <div class="flex-auto p-4">
                 <div class="flex flex-row -mx-3">
                   <div class="flex-none w-2/3 max-w-full px-3">
+                  <div class="flex lg:flex-row flex-col justify-between">
                     <div>
-                      <p class="mb-0 font-sans text-sm font-semibold leading-normal uppercase dark:text-white dark:opacity-60">Total Budgeted Money</p>
-                      <h5 class="mb-2 font-bold dark:text-white">Budgeted money</h5>
-                      <p class="mb-0 dark:text-white dark:opacity-60">
-                        <span class="text-sm font-bold leading-normal text-emerald-500">+55%</span>
-                        since yesterday
-                      </p>
+                        <p class="mb-0 font-sans text-sm font-semibold leading-normal uppercase dark:text-white dark:opacity-60">Budget</p>
+                        <h5 class="mb-2 font-bold dark:text-white">
+                        <?php
+                        $budget = 5000000;
+                        $expanse = mysqli_query($connect, "SELECT SUM(total) as purchase FROM purchaselog");
+                        $expanse = mysqli_fetch_assoc($expanse);
+                        $expanse = $expanse['purchase'];
+                        $remain = $budget - $expanse;
+                        echo "IDR " . number_format($budget);
+                        ?>
+                        <h5>
+                      </div>
+                      <div>
+                        <p class="mb-0 font-sans text-sm font-semibold leading-normal uppercase dark:text-white dark:opacity-60">Total Money Remain</p>
+                        <h5 class="mb-2 font-bold dark:text-white <?php if($remain < 500000){ echo "text-red-500";}else { echo "text-green-500";} ?>">
+                        <?php
+                       
+                        echo "IDR " . number_format($remain);
+                        ?>
+                        <h5>
+                      </div>
                     </div>
                   </div>
                   <div class="px-3 text-right basis-1/3">
@@ -298,30 +298,24 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
               </div>
             </div>
           </div>
-
           <!-- card2 -->
 
 
           <!-- card4 -->
-          <div class="w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:w-2/4">
+          <div class="w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:w-1/3 mt-4 ">
             <div class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
               <div class="flex-auto p-4">
                 <div class="flex flex-row -mx-3">
                   <div class="flex-none w-2/3 max-w-full px-3">
-                    <div>
-                      <p class="mb-0 font-sans text-sm font-semibold leading-normal uppercase dark:text-white dark:opacity-60">Total Expanses Money</p>
-                      <h5 class="mb-2 font-bold dark:text-white">
-                      <?php
-                      $expanse = mysqli_query($connect, "SELECT SUM(total) as purchase FROM purchaselog");
-                      $expanse = mysqli_fetch_assoc($expanse);
-                      $expanse = $expanse['purchase'];
-                      echo "IDR " . number_format($expanse);
-                      ?>
-                      <h5>
-                      <p class="mb-0 dark:text-white dark:opacity-60">
-                        <span class="text-sm font-bold leading-normal text-emerald-500">+5%</span>
-                        than last month
-                      </p>
+                    <div class="flex lg:flex-row flex-col justify-between">
+                      <div>
+                        <p class="mb-0 font-sans text-sm font-semibold leading-normal uppercase dark:text-white dark:opacity-60">Total Expanses Money</p>
+                        <h5 class="mb-2 font-bold dark:text-white">
+                        <?php
+                        echo "IDR " . number_format($expanse);
+                        ?>
+                        <h5>
+                      </div>
                     </div>
                   </div>
                   <div class="px-3 text-right basis-1/3">
@@ -337,7 +331,30 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 
         <!-- cards row 2 -->
         <div class="flex flex-wrap mt-6 -mx-3">
-
+        <div class="w-full max-w-full px-3  sm:flex-none xl:w-1/3 mt-4 mx-auto">
+            <div class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
+              <div class="flex-auto p-4">
+                <form action="function/function.php" method="post">
+                  <div class="flex flex-col -mx-3">
+                    <span class="text-xl p-3 font-semibold">Add Data</span>
+                    <div class="flex lg:flex-row flex-col justify-center  mx-4 gap-4">
+                      <div class="flex flex-col lg:w-1/2 ">
+                        <label for="item">Items</label>
+                        <input type="text" name="items" id="item" class="border-2  ">
+                      </div>
+                      <div class="flex flex-col lg:w-1/2 ">
+                        <label for="item">Total</label>
+                        <input type="text" name="total" id="item" class="border-2 ">
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <button class="bg-sky-500 rounded-lg p-2" name="submit">Submit</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
 
         </div>
 
@@ -349,12 +366,28 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
               <div class="p-4 pb-0 mb-0 rounded-t-4">
                 <div class="flex justify-between">
                   <h6 class="mb-2 dark:text-white">Purchases Log</h6>
-                  <h6 class="mb-2 dark:text-white bg-blue-300">Add Expanse</h6>
                 </div>
               </div>
               <div class="overflow-x-auto">
                 <table class="items-center w-full mb-4 align-top border-collapse border-gray-200 dark:border-white/40">
                   <tbody>
+                    <!-- <tr>
+                      <td class="p-2 text-sm leading-normal align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
+                        <div class="flex-1 text-center">
+                          <h6 class="mb-0 text-sm leading-normal dark:text-white">Add Data</h6>
+                        </div>
+                      </td>
+                      <td class="p-2 text-sm leading-normal align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
+                        <div class="flex-1 text-center">
+                          <input type="text" name="" id="">
+                        </div>
+                      </td>
+                      <td class="p-2 text-sm leading-normal align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
+                        <div class="flex-1 text-center">
+                          <input type="text" name="" id="">
+                        </div>
+                      </td>
+                    </tr> -->
                     <tr>
                       <td class="p-2 align-middle bg-transparent border-b w-3/10 whitespace-nowrap dark:border-white/40">
                         <div class="flex items-center px-2 py-1">
@@ -365,17 +398,22 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
                       </td>
                       <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
                         <div class="text-center">
-                          <h6 class="mb-0 text-sm leading-normal dark:text-white">Items</h6>
+                          <h6 class="mb-0 text-sm leading-normal dark:text-white">Date</h6>
                         </div>
                       </td>
                       <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
                         <div class="text-center">
-                          <h6 class="mb-0 text-sm leading-normal dark:text-white">Date</h6>
+                          <h6 class="mb-0 text-sm leading-normal dark:text-white">Items</h6>
                         </div>
                       </td>
                       <td class="p-2 text-sm leading-normal align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
                         <div class="flex-1 text-center">
                           <h6 class="mb-0 text-sm leading-normal dark:text-white">Totals</h6>
+                        </div>
+                      </td>
+                      <td class="p-2 text-sm leading-normal align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
+                        <div class="flex-1 text-center">
+                          <h6 class="mb-0 text-sm leading-normal dark:text-white">Action</h6>
                         </div>
                       </td>
                     </tr>
@@ -393,12 +431,12 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
                       </td>
                       <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
                         <div class="text-center">
-                          <h6 class="mb-0 text-sm leading-normal dark:text-white"><?= $row['items']?></h6>
+                          <h6 class="mb-0 text-sm leading-normal dark:text-white"><?= $row['date']?></h6>
                         </div>
                       </td>
                       <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
                         <div class="text-center">
-                          <h6 class="mb-0 text-sm leading-normal dark:text-white"><?= $row['date']?></h6>
+                          <h6 class="mb-0 text-sm leading-normal dark:text-white"><?= $row['items']?></h6>
                         </div>
                       </td>
                       <td class="p-2 text-sm leading-normal align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
@@ -406,8 +444,18 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
                           <h6 class="mb-0 text-sm leading-normal dark:text-white"><?php echo number_format($row['total'])?></h6>
                         </div>
                       </td>
+                      <td class="p-2 text-sm leading-normal align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
+                        <div class="flex-1 text-center">
+                          <a href="?page=&action=del&id=<?= $row['id_purchase']?>" class="text-red-500 font-bold text-xl" onclick="alert('Are you sure want to delete?')">-</a>
+                        </div>
+                      </td>
                     </tr>
                     <?php
+                    }
+                    if ($page == ""){
+                      if ($action == "del"){
+                        include "function/del.php";
+                      }
                     }
                     ?>
                   </tbody>

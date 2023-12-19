@@ -1,4 +1,5 @@
 <?php
+session_start();
 include "../connect.php";
 $id = $_GET['id'];
 $del = mysqli_query($connect, "DELETE FROM purchaselog WHERE id_purchase = '$id'");

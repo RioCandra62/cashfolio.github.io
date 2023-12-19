@@ -1,23 +1,11 @@
-<!--
 
-=========================================================
-* Argon Dashboard 2 Tailwind - v1.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-tailwind
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-* Coded by www.creative-tim.com
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <?php
+session_start();
 include "connect.php";
 error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 $page = $_GET["page"];
 $action = $_GET["action"];
+$username = $_GET["username"];
 ?>
 <!DOCTYPE html>
 <html>
@@ -66,43 +54,6 @@ $action = $_GET["action"];
               <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Dashboard</span>
             </a>
           </li>
-
-          <!-- <li class="mt-0.5 w-full">
-            <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="./pages/tables.html">
-              <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-calendar-grid-58"></i>
-              </div>
-              <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Tables</span>
-            </a>
-          </li>
-
-          <li class="mt-0.5 w-full">
-            <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="./pages/billing.html">
-              <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
-                <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-credit-card"></i>
-              </div>
-              <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Billing</span>
-            </a>
-          </li>
-
-          <li class="mt-0.5 w-full">
-            <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="./pages/virtual-reality.html">
-              <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-app"></i>
-              </div>
-              <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Virtual Reality</span>
-            </a>
-          </li>
-
-          <li class="mt-0.5 w-full">
-            <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="./pages/rtl.html">
-              <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-world-2"></i>
-              </div>
-              <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">RTL</span>
-            </a>
-          </li> -->
-
           <li class="w-full mt-4">
             <h6 class="pl-6 ml-2 text-xs font-bold leading-tight uppercase dark:text-white opacity-60">Account pages</h6>
           </li>
@@ -146,13 +97,11 @@ $action = $_GET["action"];
             </div>
             <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full">
               <!-- online builder btn  -->
-              <!-- <li class="flex items-center">
-                <a class="inline-block px-8 py-2 mb-0 mr-4 text-xs font-bold text-center text-blue-500 uppercase align-middle transition-all ease-in bg-transparent border border-blue-500 border-solid rounded-lg shadow-none cursor-pointer leading-pro hover:-translate-y-px active:shadow-xs hover:border-blue-500 active:bg-blue-500 active:hover:text-blue-500 hover:text-blue-500 tracking-tight-rem hover:bg-transparent hover:opacity-75 hover:shadow-none active:text-white active:hover:bg-transparent" target="_blank" href="https://www.creative-tim.com/builder/soft-ui?ref=navbar-dashboard&amp;_ga=2.76518741.1192788655.1647724933-1242940210.1644448053">Online Builder</a>
-              </li> -->
+  
               <li class="flex items-center">
-                <a href="./pages/sign-in.html" class="block px-0 py-2 text-sm font-semibold text-white transition-all ease-nav-brand">
+                <a href="<?php if($username != ""){echo "pages/sign-in.php";session_destroy();}else{echo "pages/sign-in.php";}?>" class="block px-0 py-2 text-sm font-semibold text-white transition-all ease-nav-brand">
                   <i class="fa fa-user sm:mr-1"></i>
-                  <span class="hidden sm:inline">Sign In</span>
+                  <span class="hidden sm:inline"><?php if($username != ""){echo $username;}else{echo "sign in";} ?></span>
                 </a>
               </li>
               <li class="flex items-center pl-4 xl:hidden">
@@ -253,7 +202,7 @@ $action = $_GET["action"];
       <!-- end Navbar -->
       <!-- cards -->
       <div class="flex">
-        <span class="font-bold text-xl mx-auto text-white">Welcome Back, User</span>
+        <span class="font-bold text-xl mx-auto text-white"><?php if($username != ""){echo "Welcome back ". $username. "!";}else {echo "Please sign in to add purchase data";}?></span>
       </div>
       <div class="w-full px-6 py-6 mx-auto">
         <!-- row 1 -->
@@ -330,7 +279,7 @@ $action = $_GET["action"];
         </div>
 
         <!-- cards row 2 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
+        <div class="flex flex-wrap mt-6 -mx-3 <?php if($username == ""){echo "hidden";}?>">
         <div class="w-full max-w-full px-3  sm:flex-none xl:w-1/3 mt-4 mx-auto">
             <div class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
               <div class="flex-auto p-4">
@@ -340,6 +289,7 @@ $action = $_GET["action"];
                     <div class="flex lg:flex-row flex-col justify-center  mx-4 gap-4">
                       <div class="flex flex-col lg:w-1/2 ">
                         <label for="item">Items</label>
+                        <input type="hidden" readonly value="<?= $username?>" name="username">
                         <input type="text" name="items" id="item" class="border-2  ">
                       </div>
                       <div class="flex flex-col lg:w-1/2 ">
@@ -371,23 +321,6 @@ $action = $_GET["action"];
               <div class="overflow-x-auto">
                 <table class="items-center w-full mb-4 align-top border-collapse border-gray-200 dark:border-white/40">
                   <tbody>
-                    <!-- <tr>
-                      <td class="p-2 text-sm leading-normal align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
-                        <div class="flex-1 text-center">
-                          <h6 class="mb-0 text-sm leading-normal dark:text-white">Add Data</h6>
-                        </div>
-                      </td>
-                      <td class="p-2 text-sm leading-normal align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
-                        <div class="flex-1 text-center">
-                          <input type="text" name="" id="">
-                        </div>
-                      </td>
-                      <td class="p-2 text-sm leading-normal align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
-                        <div class="flex-1 text-center">
-                          <input type="text" name="" id="">
-                        </div>
-                      </td>
-                    </tr> -->
                     <tr>
                       <td class="p-2 align-middle bg-transparent border-b w-3/10 whitespace-nowrap dark:border-white/40">
                         <div class="flex items-center px-2 py-1">
@@ -411,7 +344,7 @@ $action = $_GET["action"];
                           <h6 class="mb-0 text-sm leading-normal dark:text-white">Totals</h6>
                         </div>
                       </td>
-                      <td class="p-2 text-sm leading-normal align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
+                      <td class="p-2 text-sm leading-normal align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40 <?php if($username == ""){echo "hidden";}?>">
                         <div class="flex-1 text-center">
                           <h6 class="mb-0 text-sm leading-normal dark:text-white">Action</h6>
                         </div>
@@ -421,7 +354,7 @@ $action = $_GET["action"];
                     $sql = mysqli_query($connect, "SELECT * FROM purchaselog ORDER BY date DESC");
                     while ($row = $sql -> fetch_assoc()){
                     ?>
-                    <tr>
+                    <tr class="<?php if($remain < $row['total']){echo "text-red-500";} ?>">
                       <td class="p-2 align-middle bg-transparent border-b w-3/10 whitespace-nowrap dark:border-white/40">
                         <div class="flex items-center px-2 py-1">
                           <div class="ml-6">
@@ -444,7 +377,7 @@ $action = $_GET["action"];
                           <h6 class="mb-0 text-sm leading-normal dark:text-white"><?php echo number_format($row['total'])?></h6>
                         </div>
                       </td>
-                      <td class="p-2 text-sm leading-normal align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
+                      <td class="p-2 text-sm leading-normal align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40 <?php if($username == ""){echo "hidden";}?>">
                         <div class="flex-1 text-center">
                           <a href="?page=&action=del&id=<?= $row['id_purchase']?>" class="text-red-500 font-bold text-xl" onclick="alert('Are you sure want to delete?')">-</a>
                         </div>
